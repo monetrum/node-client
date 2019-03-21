@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "C:\\nodejs\\monetrum-client\\db\\monetrum.sqlite",
+            "dialect": "SQLite",
+            "name": "Monetrum-Client"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

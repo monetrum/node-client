@@ -1,0 +1,33 @@
+{
+  "name": "monetrum-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-boost": "^0.1.28",
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-client": "^2.5.1",
+    "apollo-link": "^1.2.11",
+    "apollo-link-context": "^1.0.17",
+    "apollo-link-error": "^1.1.10",
+    "apollo-link-http": "^1.5.14",
+    "apollo-link-ws": "^1.0.17",
+    "bitcoin": "^3.0.1",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "knex": "^0.16.3",
+    "knex-upsert": "0.0.4",
+    "node-fetch": "^2.3.0",
+    "nodemon": "^1.18.10",
+    "react-apollo": "^2.5.2",
+    "sqlite3": "^4.0.6",
+    "subscriptions-transport-ws": "^0.9.16",
+    "ws": "^6.2.0"
+  }
+}
