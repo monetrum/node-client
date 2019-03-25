@@ -33,7 +33,9 @@ class Monetrum {
       });
     }
   }
-
+  /**
+   * @description connect() is the function used to connect to the Monetrum Masternode API.
+   */
   async connect() {
     try {
       const client = new graphQLClient(this.uri, false);
@@ -69,7 +71,7 @@ class Monetrum {
    *
    * @param {*} func
    * @param {*} params
-   * @description hdsjhgklsdh
+   * @description cmd() is the function used to run the service by service name and by taking a parameter.
    */
   async cmd(func, params) {
     try {
