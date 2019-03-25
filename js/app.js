@@ -15,7 +15,7 @@ async function call() {
       assets: ["MNT"]
     });
 */
-/*
+    /*
     let result2 = await monetrum.getBalanceByWallet({
       assets: ["MNT"]
     });*/

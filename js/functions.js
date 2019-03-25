@@ -220,7 +220,7 @@ monetrumQueries.save = {
 
 monetrumQueries.send = {
   query: `
-    mutation(      
+    mutation(
       $keys: SendKeysInput!
       $from: String!
       $to: String!

@@ -1,9 +1,11 @@
 const graphQLClient = require("./graphQLClient");
 const commands = require("./commands");
 const functions = require("./functions");
-const { createWallet } = require("../helpers/ecdsa");
+const { createWallet, nonce, signing } = require("../helpers/ecdsa");
 const message = require("../message/message");
-const { persistWallet } = require("../db/store");
+const { persistWallet, getSqliteMaster } = require("../db/store");
+const knex = require("../knex/knex.js");
+var fs = require("fs");
 
 class Monetrum {
   constructor(opts) {
@@ -33,17 +35,42 @@ class Monetrum {
   }
 
   async connect() {
-    const client = new graphQLClient(this.uri, false);
-    client.setErrorCallback(this.graphQLErrorCallback);
-    await client.connect();
-    this.client = client;
+    try {
+      const client = new graphQLClient(this.uri, false);
+      client.setErrorCallback(this.graphQLErrorCallback);
+      await client.connect();
+      this.client = client;
+      await this.initDatabase();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
-/**
- * 
- * @param {*} func 
- * @param {*} params 
- * @description hdsjhgklsdh
- */
+
+  async initDatabase() {
+    try {
+      let result = await getSqliteMaster();
+      if (fs.statSync("db/monetrum.sqlite")) {
+        if (result.length == 0) {
+          console.log("result : " + result);
+          await knex.migrate.latest().then(function(data) {
+            console.log("Database created successfully." + data);
+            return;
+          });
+        }
+      } else {
+        console.log("elseeee");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
+   *
+   * @param {*} func
+   * @param {*} params
+   * @description hdsjhgklsdh
+   */
   async cmd(func, params) {
     try {
       this.checkConnection();
@@ -213,7 +240,7 @@ class Monetrum {
     try {
       this.checkConnection();
       let keys = {};
-      let { from, to, amount, asset, private_key } = params;
+      let { from, to, amount, asset, private_key, public_key } = params;
 
       if (!from) {
         throw new Error(message.senderWalletMandatory);
@@ -227,11 +254,16 @@ class Monetrum {
       if (!asset) {
         throw new Error(message.assetMandatory);
       }
-      if (private_key) {
-        keys.private_key = private_key;
-      } else {
+      if (!private_key) {
         throw new Error(message.privateKeyMandatory);
       }
+      if (public_key) {
+        keys.public_key = public_key;
+      } else {
+        throw new Error(message.publicKeyMandatory);
+      }
+      let msg = `${from}__${to}__${amount}__${asset}__${nonce()}`;
+      keys.sign = signing(private_key, msg);
       params.keys = keys;
       return await this.client.mutation(functions["send"].query, params);
     } catch (error) {

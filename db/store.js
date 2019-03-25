@@ -3,7 +3,7 @@ Knex.js is SQL query builder for SQLITE3 designed to be flexible, portable and f
 Document: http://knexjs.org/
 */
 
-const knex = require("knex")(require("../knexfile"));
+const knex = require("../knex/knex.js");
 const upsert = require("../helpers/upsert");
 
 async function persistWallet(account_id, public_key, private_key, address) {
@@ -21,15 +21,11 @@ async function persistWallet(account_id, public_key, private_key, address) {
   }
 }
 
-function getProducts() {
-  console.log("fetching products");
-  return knex("products")
-    .select("*")
-    .orderBy("updated_at", "desc")
-    .limit(10);
+async function getSqliteMaster() {
+  return await knex("sqlite_master").select("*");
 }
 
 module.exports = {
   persistWallet,
-  getProducts
+  getSqliteMaster
 };
