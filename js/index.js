@@ -93,7 +93,11 @@ class Monetrum {
       throw new Error(message.connectionNotFound);
     }
   }
-
+  /**
+   *
+   * @param {*} params
+   * @description getBalanceByWallet() is the service that brings balance information according to the wallet address.
+   */
   async getBalanceByWallet(params) {
     try {
       this.checkConnection();
@@ -109,6 +113,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getBalanceByAccount() is the service that brings balance information to the account.
+   */
   async getBalancesByAccount(params) {
     try {
       this.checkConnection();
@@ -125,6 +134,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getWallets() is the service that brings wallet information according to the account.
+   */
   async getWallets(params) {
     try {
       this.checkConnection();
@@ -138,6 +152,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getWallet() is the service that brings wallet information according to the public key of the wallet.
+   */
   async getWallet(params) {
     try {
       this.checkConnection();
@@ -150,6 +169,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getWalletInfo() is the service that brings wallet information according to the private key of the wallet.
+   */
   async getWalletInfo(params) {
     try {
       this.checkConnection();
@@ -168,6 +192,7 @@ class Monetrum {
   /**
    *
    * @description beklesinn
+   * @description getTxList() is the service that fetches the tx list by filter, sorting, cursor, limit fields.
    */
 
   async getTxList(params) {
@@ -177,6 +202,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getTx() is the service used to fetch only one TX process based on hash and seq fields.
+   */
   async getTx(params) {
     try {
       this.checkConnection();
@@ -193,18 +223,11 @@ class Monetrum {
     }
   }
 
-  async update(params) {
-    try {
-      this.checkConnection();
-      if (params.public_key) {
-        return await this.client.mutation(functions["update"].query, params);
-      } else {
-        throw new Error(message.publicKeyMandatory);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
+  /**
+   *
+   * @param {*} params
+   * @description save() is the service used to create a wallet and save it to the network.The created wallet is also saved in the local database.
+   */
   async save(params) {
     try {
       this.checkConnection();
@@ -236,6 +259,29 @@ class Monetrum {
     }
   }
 
+  /**
+   *
+   * @param {*} params
+   * @description update() is the service that allows you to update wallet_data according to public key.
+   */
+  async update(params) {
+    try {
+      this.checkConnection();
+      if (params.public_key) {
+        return await this.client.mutation(functions["update"].query, params);
+      } else {
+        throw new Error(message.publicKeyMandatory);
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  /**
+   *
+   * @param {*} params
+   * description send () is the service that enables you to transfer money(coin).
+   */
   async send(params) {
     try {
       this.checkConnection();
@@ -270,6 +316,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description deleteTxData() is the service that allows you to delete tx data according to hash and public_key.
+   */
   async deleteTxData(params) {
     try {
       this.checkConnection();
@@ -292,10 +343,12 @@ class Monetrum {
       throw new Error(error);
     }
   }
+
   /**
- * 
- sonra dön
- */
+   *
+   * @param {*} params
+   * @description getAssets() is the service that brings the information of multiple asset according to filters, sorting and cursor fields.
+   */
   async getAssets(params) {
     try {
       this.checkConnection();
@@ -305,6 +358,11 @@ class Monetrum {
     }
   }
 
+  /**
+   *
+   * @param {*} params
+   * @description getAsset() is the service that brings the information of only one asset according to name, symbol, and _id.
+   */
   async getAsset(params) {
     try {
       this.checkConnection();
@@ -323,6 +381,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getContract() is the service that brings smart contract information according to contact_id and account_id fields.
+   */
   async getContract(params) {
     try {
       this.checkConnection();
@@ -343,6 +406,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
+  /**
+   *
+   * @param {*} params
+   * @description getContractByAddress() is the service that fetches the smart contract information for the given wallet address.
+   */
   async getContractByAddress(params) {
     try {
       this.checkConnection();
@@ -358,7 +426,11 @@ class Monetrum {
       throw new Error(error);
     }
   }
-
+  /**
+   *
+   * @param {*} params
+   * @description getContracts() is the service that brings smart contracts by filters, sorting, and cursor fields.
+   */
   async getContracts(params) {
     try {
       this.checkConnection();
@@ -383,10 +455,13 @@ class Monetrum {
       throw new Error(error);
     }
   }
-  /***
-   * @description Monetrum Smart Contract yaratmak için kullanılır.
+
+  /**
+   *
+   * @param {*} params
+   * @description createSmartContract() is the service used to create smart contracts.
    */
-  async create(params) {
+  async createSmartContract(params) {
     try {
       this.checkConnection();
       let parameter = params;
@@ -398,7 +473,7 @@ class Monetrum {
       if (!parameters.code) {
         throw new Error(message.smartContractMandatory);
       }
-      return await this.client.query(functions["create"].query, {
+      return await this.client.query(functions["createSmartContract"].query, {
         parameter: parameter
       });
     } catch (error) {

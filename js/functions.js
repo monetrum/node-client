@@ -412,7 +412,7 @@ monetrumQueries.getContracts = {
   `,
   type: 1
 };
-monetrumQueries.create = {
+monetrumQueries.createSmartContract = {
   query: `
     mutation(
       $account_id: ObjectID
