@@ -25,7 +25,14 @@ async function getSqliteMaster() {
   return await knex("sqlite_master").select("*");
 }
 
+async function getWalletsCreatedOnNodeClient() {
+  return await knex("wallets")
+    .select("*")
+    .orderBy("updated_at", "desc");
+}
+
 module.exports = {
   persistWallet,
-  getSqliteMaster
+  getSqliteMaster,
+  getWalletsCreatedOnNodeClient
 };

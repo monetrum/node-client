@@ -2,7 +2,11 @@ const graphQLClient = require("./graphQLClient");
 const functions = require("./functions");
 const { createWallet, nonce, signing } = require("../helpers/ecdsa");
 const message = require("../message/message");
-const { persistWallet, getSqliteMaster } = require("../db/store");
+const {
+  persistWallet,
+  getSqliteMaster,
+  getWalletsCreatedOnNodeClient
+} = require("../db/store");
 const knex = require("../knex/knex.js");
 var fs = require("fs");
 global.appdir = __dirname;
@@ -112,6 +116,17 @@ class Monetrum {
       } else {
         throw new Error(message.walletMandatory);
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  /**
+   *
+   * @description getWalletsCreatedOnNodeClient() is the service that creates the wallets created in the node client.
+   */
+  async getWalletsCreatedOnNodeClient() {
+    try {
+      return await getWalletsCreatedOnNodeClient();
     } catch (error) {
       throw new Error(error);
     }
