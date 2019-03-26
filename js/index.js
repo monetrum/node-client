@@ -1,11 +1,11 @@
 const graphQLClient = require("./graphQLClient");
-const commands = require("./commands");
 const functions = require("./functions");
 const { createWallet, nonce, signing } = require("../helpers/ecdsa");
 const message = require("../message/message");
 const { persistWallet, getSqliteMaster } = require("../db/store");
 const knex = require("../knex/knex.js");
 var fs = require("fs");
+global.appdir = __dirname;
 
 class Monetrum {
   constructor(opts) {
@@ -51,9 +51,10 @@ class Monetrum {
   async initDatabase() {
     try {
       let result = await getSqliteMaster();
-      if (fs.statSync("db/monetrum.sqlite")) {
+      if (
+        fs.existsSync(require.resolve(__dirname + "/../db/monetrum.sqlite"))
+      ) {
         if (result.length == 0) {
-          console.log("result : " + result);
           await knex.migrate.latest().then(function(data) {
             console.log("Database created successfully." + data);
             return;
