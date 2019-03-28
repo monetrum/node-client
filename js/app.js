@@ -1,32 +1,25 @@
 var Monetrum = require("./index");
-var Functions = require("./functions");
-
-async function call() {
+(async function call() {
   try {
     let monetrum = new Monetrum({
       uri: "http://185.195.255.172/graphql",
       account_id: "5c73ed220b7aec64f1b68579"
     });
-
     await monetrum.connect();
-    /*
-    let result = await monetrum.callFunction("getBalanceByWallet", {
-      address: "90x1EJBNIBNOHD73AQ2QBDM1TEAWJZXZ7NSWO",
-      assets: ["MNT"]
+    //The following two lines run the same service.
+    /*let result1 = await monetrum.getBalance({
+      address: "90x188RA1CMSKRPWFSRVP6UUJHZ4E5EC4HE3U"
+    });*/
+    let result1 = await monetrum.call("update", {
+      public_key:
+        "4Vg6bv378RN4pRSbVvzKJ5hAmbC7etp8jR7M7zyX3NDuvgRUqg2FBTayW5SGdkdNrAHfUkdMhjg2GM6CDQVxi88a"
     });
-*/
-    /*
-    let result2 = await monetrum.getBalanceByWallet({
-      assets: ["MNT"]
+    /* let result1 = await monetrum.getWalletInfo({
+      private_key: "DGgV6kWL8jJznPT5uBJ7L2tJ8fRTjkqzu7TuKC8p5xCb"
     });*/
 
-    let result = await monetrum.save({});
-
-    //let result = await monetrum.cmd("save", {});
-    console.log("RESULTTTT   :   " + JSON.stringify(result));
-  } catch (error) {
-    console.log(error);
-    throw new Error(error);
+    console.log("result1 : " + JSON.stringify(result1));
+  } catch (e) {
+    console.error(e);
   }
-}
-call();
+})();

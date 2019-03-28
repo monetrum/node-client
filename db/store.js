@@ -25,9 +25,39 @@ async function getSqliteMaster() {
   return await knex("sqlite_master").select("*");
 }
 
-async function getWalletsCreatedOnNodeClient() {
+async function getWalletsCreatedOnNodeClient({
+  account_id,
+  address,
+  public_key,
+  private_key
+}) {
+  let whereClause = "";
+  if (account_id) {
+    whereClause += "wallets.account_id='" + account_id + "'";
+  }
+  if (address) {
+    if (whereClause) {
+      whereClause += " and ";
+    }
+    whereClause += "wallets.address='" + address + "'";
+  }
+
+  if (public_key) {
+    if (whereClause) {
+      whereClause += " and ";
+    }
+    whereClause += "wallets.public_key='" + public_key + "'";
+  }
+
+  if (private_key) {
+    if (whereClause) {
+      whereClause += " and ";
+    }
+    whereClause += "wallets.private_key='" + private_key + "'";
+  }
+
   return await knex("wallets")
-    .select("*")
+    .whereRaw(whereClause)
     .orderBy("updated_at", "desc");
 }
 

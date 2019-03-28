@@ -78,7 +78,7 @@ class Monetrum {
    * @param {*} params
    * @description cmd() is the function used to run the service by service name and by taking a parameter.
    */
-  async cmd(func, params) {
+  async call(func, params) {
     try {
       this.checkConnection();
       let object = functions[func];
@@ -105,28 +105,20 @@ class Monetrum {
    * @param {*} params
    * @description getBalanceByWallet() is the service that brings balance information according to the wallet address.
    */
-  async getBalanceByWallet(params) {
+  async getBalance(params) {
     try {
       this.checkConnection();
-      if (params.address) {
-        return await this.client.query(
-          functions["getBalanceByWallet"].query,
-          params
-        );
-      } else {
+      if (!params.address) {
         throw new Error(message.walletMandatory);
       }
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-  /**
-   *
-   * @description getWalletsCreatedOnNodeClient() is the service that creates the wallets created in the node client.
-   */
-  async getWalletsCreatedOnNodeClient() {
-    try {
-      return await getWalletsCreatedOnNodeClient();
+      let result = await this.client.query(
+        functions["getBalance"].query,
+        params
+      );
+      if (result) {
+        return result.wallet.getBalanceByWallet;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -139,15 +131,18 @@ class Monetrum {
   async getBalancesByAccount(params) {
     try {
       this.checkConnection();
-      if (this.account_id) {
-        params.account_id = account_id;
-        return await this.client.query(
-          functions["getBalancesByAccount"].query,
-          params
-        );
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
+      params.account_id = this.account_id;
+      let result = await this.client.query(
+        functions["getBalancesByAccount"].query,
+        params
+      );
+      if (result) {
+        return result.wallet.getBalancesByAccount.wallets;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -159,13 +154,34 @@ class Monetrum {
    */
   async getWallets(params) {
     try {
+      let wallets = [];
       this.checkConnection();
-      if (this.account_id) {
-        params.account_id = this.account_id;
-        return await this.client.query(functions["getWallets"].query, params);
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
+
+      params.account_id = this.account_id;
+      let result = await this.client.query(
+        functions["getWallets"].query,
+        params
+      );
+      let walletsFromApi = result.wallet.getWallets.wallets;
+      let walletsFromLocal = await getWalletsCreatedOnNodeClient({
+        account_id: this.account_id
+      });
+      if (walletsFromApi) {
+        wallets.push(...walletsFromApi);
+        if (walletsFromLocal) {
+          walletsFromLocal.forEach(function(val) {
+            var picked = wallets.find(x => x.address === val.address);
+            if (picked) {
+              picked.private_key = val.private_key;
+              picked.public_key = val.public_key;
+            }
+          });
+        }
+      }
+      return wallets;
     } catch (error) {
       throw new Error(error);
     }
@@ -178,11 +194,26 @@ class Monetrum {
   async getWallet(params) {
     try {
       this.checkConnection();
-      if (params.public_key) {
-        return await this.client.query(functions["getWallet"].query, params);
-      } else {
+      if (!params.public_key) {
         throw new Error(message.publicKeyMandatory);
       }
+
+      let result = await this.client.query(
+        functions["getWallet"].query,
+        params
+      );
+      let walletsFromLocal = await getWalletsCreatedOnNodeClient({
+        public_key: params.public_key
+      });
+      let walletsFromApi = result.wallet.getWallet;
+      if (walletsFromApi && walletsFromLocal.length == 1) {
+        let walletLocal = walletsFromLocal[0];
+        if (walletsFromApi.address === walletLocal.address) {
+          walletsFromApi.private_key = walletLocal.private_key;
+          walletsFromApi.public_key = walletLocal.public_key;
+        }
+      }
+      return walletsFromApi;
     } catch (error) {
       throw new Error(error);
     }
@@ -195,33 +226,67 @@ class Monetrum {
   async getWalletInfo(params) {
     try {
       this.checkConnection();
-      if (params.private_key) {
-        return await this.client.query(
-          functions["getWalletInfo"].query,
-          params
-        );
-      } else {
+      if (!params.private_key) {
         throw new Error(message.privateKeyMandatory);
       }
+      let result = await this.client.query(
+        functions["getWalletInfo"].query,
+        params
+      );
+      if (result) {
+        return result.wallet.getWalletInfo;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
   }
   /**
-   *
+   *1
    * @description beklesinn
    * @description getTxList() is the service that fetches the tx list by filter, sorting, cursor, limit fields.
    */
 
   async getTxList(params) {
     try {
-      return await this.client.query(functions["getTxList"].query, params);
+      if (!params.filters) {
+        throw new Error(message.filtersMandatory);
+      }
+      if (!params.sorting) {
+        throw new Error(message.sortingMandatory);
+      }
+
+      for (var key in params.filters) {
+        if (p.hasOwnProperty(key)) {
+          if (key === "my_tx") {
+            //account_id geçilecek
+            filters[key] = p[key];
+          } else {
+            filters[key] = { eq: p[key] };
+          }
+        }
+      }
+      let parameter = { filters, sorting };
+      if (params.cursor) {
+        parameter.cursor = params.cursor;
+      }
+      if (params.limit) {
+        parameter.limit = params.limit;
+      }
+      let result = await this.client.query(
+        functions["getTxList"].query,
+        parameter
+      );
+      if (result) {
+        return result.tx.getTxList;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
   }
   /**
-   *
+   *1
    * @param {*} params
    * @description getTx() is the service used to fetch only one TX process based on hash and seq fields.
    */
@@ -249,29 +314,25 @@ class Monetrum {
   async save(params) {
     try {
       this.checkConnection();
-      if (this.account_id) {
-        let walletInfo = createWallet();
-        params.account_id = this.account_id;
-        params.public_key = walletInfo.publicKey;
-        params.private_key = walletInfo.privateKey;
-        params.address = walletInfo.address;
-
-        let result = await this.client.mutation(
-          functions["save"].query,
-          params
-        );
-        if (result) {
-          await persistWallet(
-            this.account_id,
-            params.public_key,
-            params.private_key,
-            params.address
-          );
-        }
-        return result;
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
+      let walletInfo = createWallet();
+      params.account_id = this.account_id;
+      params.public_key = walletInfo.publicKey;
+      params.private_key = walletInfo.privateKey;
+      params.address = walletInfo.address;
+      let result = await this.client.mutation(functions["save"].query, params);
+      if (result) {
+        await persistWallet(
+          this.account_id,
+          params.public_key,
+          params.private_key,
+          params.address
+        );
+        return result.wallet.save;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -285,18 +346,25 @@ class Monetrum {
   async update(params) {
     try {
       this.checkConnection();
-      if (params.public_key) {
-        return await this.client.mutation(functions["update"].query, params);
-      } else {
+
+      if (!params.public_key) {
         throw new Error(message.publicKeyMandatory);
       }
+      let result = await this.client.mutation(
+        functions["update"].query,
+        params
+      );
+      if (result) {
+        return result.wallet.update;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
   }
 
   /**
-   *
+   *1
    * @param {*} params
    * description send () is the service that enables you to transfer money(coin).
    */
@@ -329,34 +397,37 @@ class Monetrum {
       let msg = `${from}__${to}__${amount}__${asset}__${nonce()}`;
       keys.sign = signing(private_key, msg);
       params.keys = keys;
-      return await this.client.mutation(functions["send"].query, params);
+      let result = await this.client.mutation(functions["send"].query, params);
+      if (result) {
+        return result.tx.send;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
   }
   /**
-   *
+   *1
    * @param {*} params
    * @description deleteTxData() is the service that allows you to delete tx data according to hash and public_key.
    */
   async deleteTxData(params) {
     try {
       this.checkConnection();
-      let parameter = {};
-      if (params.hash) {
-        parameter.hash = params.hash;
-      } else {
+      if (!params.hash) {
         throw new Error(message.hashMandatory);
       }
-      if (params.seq) {
-        parameter.seq = params.seq;
-      } else {
-        throw new Error(message.seqMandatory);
+      if (!params.public_key) {
+        throw new Error(message.publicKeyMandatory);
       }
-      return await this.client.mutation(
+      let result = await this.client.mutation(
         functions["deleteTxData"].query,
-        parameter
+        params
       );
+      if (result) {
+        return result.tx.deleteTxData;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -370,7 +441,20 @@ class Monetrum {
   async getAssets(params) {
     try {
       this.checkConnection();
-      return await this.client.query(functions["getAssets"].query, params);
+      if (!params.filters) {
+        throw new Error(message.filtersMandatory);
+      }
+      if (!params.sorting) {
+        throw new Error(message.sortingMandatory);
+      }
+      let result = await this.client.query(
+        functions["getAssets"].query,
+        params
+      );
+      if (result) {
+        return result.asset.getAssets;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -384,17 +468,14 @@ class Monetrum {
   async getAsset(params) {
     try {
       this.checkConnection();
-      let filters = {};
-      let asd = {};
-      asd.filters = filters;
-      if (params) {
-        filters.name = params.name;
-        filters.symbol = params.symbol;
-        filters._id = params._id;
+      if (!params.filters) {
+        throw new Error(message.filtersMandatory);
       }
-      return await this.client.query(functions["getAsset"].query, {
-        filters: filters
-      });
+      let result = await this.client.query(functions["getAsset"].query, params);
+      if (result) {
+        return result.asset.getAsset;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -407,19 +488,21 @@ class Monetrum {
   async getContract(params) {
     try {
       this.checkConnection();
-      let parameter = {};
-      if (this.account_id) {
-        parameter.account_id = this.account_id;
-        if (params.contract_id) {
-          parameter.contract_id = params.contract_id;
-        }
-        return await this.client.query(
-          functions["getContract"].query,
-          parameter
-        );
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
+      if (!params.contract_id) {
+        throw new Error(message.contractIDMandatory);
+      }
+
+      let result = await this.client.query(
+        functions["getContract"].query,
+        params
+      );
+      if (result) {
+        return result.smartContractCrud.getContract;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -432,14 +515,17 @@ class Monetrum {
   async getContractByAddress(params) {
     try {
       this.checkConnection();
-      if (params.address) {
-        return await this.client.query(
-          functions["getContractByAddress"].query,
-          { address: params.address }
-        );
-      } else {
+      if (!params.address) {
         throw new Error(message.walletMandatory);
       }
+      let result = await this.client.query(
+        functions["getContractByAddress"].query,
+        { address: params.address }
+      );
+      if (result) {
+        return result.smartContractCrud.getContractByAddress;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -452,23 +538,28 @@ class Monetrum {
   async getContracts(params) {
     try {
       this.checkConnection();
-      let filters = {};
-      let sorting = {};
-      let cursor = params.cursor;
-
-      if (this.account_id) {
-        filters.account_id = this.account_id;
-        if (params.sorting) {
-          sorting = params.sorting;
-        }
-        return await this.client.query(functions["getContracts"].query, {
-          filters,
-          sorting,
-          cursor
-        });
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
+      if (params.sorting) {
+        throw new Error(message.sortingMandatory);
+      }
+      let parameters = { sorting: params.sorting };
+      let filters = {};
+
+      filters.account_id = this.account_id;
+      parameters.filters = filters;
+      if (params.cursor) {
+        parameters.cursor = cursor;
+      }
+      let result = await this.client.query(
+        functions["getContracts"].query,
+        parameters
+      );
+      if (result) {
+        return result.smartContractCrud.getContracts;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }
@@ -483,17 +574,24 @@ class Monetrum {
     try {
       this.checkConnection();
       let parameter = params;
-      if (this.account_id) {
-        parameter.account_id = this.account_id;
-      } else {
+      if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
       if (!parameters.code) {
         throw new Error(message.smartContractMandatory);
       }
-      return await this.client.query(functions["createSmartContract"].query, {
-        parameter: parameter
-      });
+
+      parameter.account_id = this.account_id;
+      let result = await this.client.query(
+        functions["createSmartContract"].query,
+        {
+          parameters: parameter
+        }
+      );
+      if (result) {
+        return result.smartContractCrud.createSmartContract;
+      }
+      return;
     } catch (error) {
       throw new Error(error);
     }

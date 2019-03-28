@@ -11,11 +11,14 @@ messages.amountMandatory = "Bakiye bulunamadı. Lütfen amount alanını dolduru
 messages.assetMandatory = "Asset bulunamadı. Lütfen asset alanını doldurunuz.";
 messages.walletMandatory = "Cüzdan adresi bulunamadı. Lütfen address alanını doldurunuz.";
 messages.accountIDMandatory = "Account ID bulunamadı. Lütfen account_id alanını doldurunuz.";
+messages.contractIDMandatory = "Contract ID bulunamadı. Lütfen contract_id alanını doldurunuz.";
 messages.functionNotFound = "Komut bulunamadı.";
 messages.connectionNotFound = "Connection bulunamadı.";
 messages.hashMandatory = "Hash bulunamadı. Lütfen hash alanını doldurunuz.";
 messages.seqMandatory = "Sequence number bulunamadı. Lütfen seq alanını doldurunuz.";
 messages.uriMandatory = "URI bulunamadı. Lütfen uri alanını doldurunuz.";
 messages.smartContractMandatory = "Akıllı sözleşme kodu bulunamadı. Lütfen code alanını doldurunuz.";
+messages.filtersMandatory = "Filtreleme kriteri zorunludur. Lütfen filters alanını doldurunuz.";
+messages.sortingMandatory = "Sıralama kriteri zorunludur. Lütfen sorting alanını doldurunuz.";
 
 module.exports = messages;

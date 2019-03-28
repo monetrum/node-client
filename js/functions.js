@@ -1,6 +1,6 @@
 const monetrumQueries = {};
 
-monetrumQueries.getBalanceByWallet = {
+monetrumQueries.getBalance = {
   query: `
     query($address: String!, $assets: [String!]) {
       wallet {

@@ -1,8 +1,8 @@
 {
   "name": "monetrum-node-client",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
-  "main": "js/index.js",
+  "main": "js/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,7 +17,9 @@
     "apollo-link-context": "^1.0.17",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.14",
-    "apollo-link-ws": "^1.0.17",    
+    "apollo-link-ws": "^1.0.17",
+    "base-58": "0.0.1",
+    "elliptic": "^6.4.1",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "knex": "^0.16.3",
@@ -25,6 +27,7 @@
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.10",
     "react-apollo": "^2.5.2",
+    "ripemd160": "^2.0.2",
     "sqlite3": "^4.0.6",
     "subscriptions-transport-ws": "^0.9.16",
     "ws": "^6.2.0"
