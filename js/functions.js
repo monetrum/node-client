@@ -236,8 +236,7 @@ monetrumQueries.send = {
       tx {
         send(
           parameters: {
-            keys: $keys
-            public_key: $public_key
+            keys: $keys            
             from: $from
             to: $to
             amount: $amount
@@ -263,8 +262,7 @@ monetrumQueries.send = {
           hash
           nonce
           prev_hash
-          seq
-          status
+          seq          
           type
           from
           to
@@ -385,7 +383,7 @@ monetrumQueries.getContractByAddress = {
 monetrumQueries.getContracts = {
   query: `
     query(
-      $filters: ObjectID
+      $filters: GetContractsFilter
       $sorting: GetContractsSorting!
       $cursor: String
     ) {
@@ -406,6 +404,8 @@ monetrumQueries.getContracts = {
             created_date
             updated_date
           }
+          count
+          next_cursor
         }
       }
     }

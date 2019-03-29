@@ -103,9 +103,11 @@ function signing(privateKey, msg) {
   return Buffer.from(der).toString("hex");
 }
 
-function nonce() {
-  return Math.floor(new Date().getTime() / 1000);
+function getNonce() {
+  return String(new Date().getTime());
 }
+
+module.exports = getNonce;
 
 module.exports = {
   createWallet,
@@ -115,5 +117,5 @@ module.exports = {
   verify,
   signing,
   checkPrivateKey,
-  nonce
+  getNonce
 };

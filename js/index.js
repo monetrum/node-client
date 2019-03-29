@@ -1,6 +1,6 @@
 const graphQLClient = require("./graphQLClient");
 const functions = require("./functions");
-const { createWallet, nonce, signing } = require("../helpers/ecdsa");
+const { createWallet, getNonce, signing } = require("../helpers/ecdsa");
 const message = require("../message/message");
 const {
   persistWallet,
@@ -256,17 +256,19 @@ class Monetrum {
         throw new Error(message.sortingMandatory);
       }
 
-      for (var key in params.filters) {
-        if (p.hasOwnProperty(key)) {
+      let filters = {};
+      let filter = params.filters;
+      for (var key in filter) {
+        if (filter.hasOwnProperty(key)) {
           if (key === "my_tx") {
             //account_id geçilecek
-            filters[key] = p[key];
+            filters[key] = filter[key];
           } else {
-            filters[key] = { eq: p[key] };
+            filters[key] = { eq: filter[key] };
           }
         }
       }
-      let parameter = { filters, sorting };
+      let parameter = { filters, sorting: params.sorting };
       if (params.cursor) {
         parameter.cursor = params.cursor;
       }
@@ -295,12 +297,14 @@ class Monetrum {
       this.checkConnection();
       let filters = {};
       if (params) {
-        filters.hash = params.hash;
-        filters.seq = params.seq;
+        if (params.hash) {
+          filters.hash = params.hash;
+        }
+        if (params.seq) {
+          filters.seq = params.seq;
+        }
       }
-      return await this.client.mutation(functions["getTx"].query, {
-        filters: filters
-      });
+      return await this.client.query(functions["getTx"].query, { filters });
     } catch (error) {
       throw new Error(error);
     }
@@ -394,9 +398,13 @@ class Monetrum {
       } else {
         throw new Error(message.publicKeyMandatory);
       }
-      let msg = `${from}__${to}__${amount}__${asset}__${nonce()}`;
+      params.nonce = getNonce();
+      params.fee_from = keys.public_key;
+      let msg = `${from}__${to}__${amount}__${asset}__${params.nonce}`;
       keys.sign = signing(private_key, msg);
       params.keys = keys;
+      params.public_key = undefined;
+      params.private_key = undefined;
       let result = await this.client.mutation(functions["send"].query, params);
       if (result) {
         return result.tx.send;
@@ -447,12 +455,26 @@ class Monetrum {
       if (!params.sorting) {
         throw new Error(message.sortingMandatory);
       }
+
+      let filters = {};
+      let filter = params.filters;
+      for (var key in filter) {
+        if (filter.hasOwnProperty(key)) {
+          filters[key] = { eq: filter[key] };
+        }
+      }
+
+      let parameter = { filters, sorting: params.sorting };
+      if (params.cursor) {
+        parameter.cursor = params.cursor;
+      }
+
       let result = await this.client.query(
         functions["getAssets"].query,
-        params
+        parameter
       );
       if (result) {
-        return result.asset.getAssets;
+        return result.assets.getAssets;
       }
       return;
     } catch (error) {
@@ -473,7 +495,7 @@ class Monetrum {
       }
       let result = await this.client.query(functions["getAsset"].query, params);
       if (result) {
-        return result.asset.getAsset;
+        return result.assets.getAsset;
       }
       return;
     } catch (error) {
@@ -494,7 +516,7 @@ class Monetrum {
       if (!params.contract_id) {
         throw new Error(message.contractIDMandatory);
       }
-
+      params.account_id = this.account_id;
       let result = await this.client.query(
         functions["getContract"].query,
         params
@@ -541,7 +563,7 @@ class Monetrum {
       if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
-      if (params.sorting) {
+      if (!params.sorting) {
         throw new Error(message.sortingMandatory);
       }
       let parameters = { sorting: params.sorting };
@@ -577,12 +599,12 @@ class Monetrum {
       if (!this.account_id) {
         throw new Error(message.accountIDMandatory);
       }
-      if (!parameters.code) {
+      if (!params.code) {
         throw new Error(message.smartContractMandatory);
       }
 
       parameter.account_id = this.account_id;
-      let result = await this.client.query(
+      let result = await this.client.mutation(
         functions["createSmartContract"].query,
         {
           parameters: parameter
