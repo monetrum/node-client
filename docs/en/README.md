@@ -333,3 +333,9 @@
 
     let result1 = await monetrum.createSmartContract({code:"", name:"", desc:"", detail:"", image:""});
     let result2= await monetrum.call("createSmartContract", {code:"", name:"", desc:"", detail:"", image:""});
+
+## Dokümantasyon 
+|Folder|Content  |
+|--|--|
+|`./docs/en`  |Monetrum Node Client [English technical documantation](https://github.com/monetrum/node-client/tree/master/docs/en)   |
+|`./docs/tr`  |Monetrum Node Client [Türkçe teknik doküman](https://github.com/monetrum/node-client/tree/master/docs/tr)  |
