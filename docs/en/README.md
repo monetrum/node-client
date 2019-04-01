@@ -17,6 +17,7 @@
 	      account_id: "5c12ed220b33ecae4f23268579"
 	    });
 	    await monetrum.connect();
+	    //save() is the service used to create a wallet and save it to the network.The created wallet is also saved in the local database.
 	    //The following two lines run the same service.
 	    let result1 = await monetrum.save({});
 	    let result2 = await monetrum.call("save", {});
@@ -26,12 +27,8 @@
 	  }
 	})();   
      
-     
-   ## Monetrum Node Client Commands
-   
-
-   ## getBalance
-
+## Monetrum Node Client Commands
+## getBalance
 >   ***`getBalance()`*** is the service that brings balance information according to the wallet address.
 
     getBalance({address})
@@ -124,22 +121,22 @@
 
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
-|`filters`   | Filtreleme kriteri|`Object`| required
-|  | `asset`: Asset tipi|`String`| optional
-|  |`type` : tx tipi|`Integer`| optional
-| | `seq`:  tx sequence numarası|`Integer`| optional
-|   |`from` :Cüzdan adresi|`String`| optional
-|   |`action_time`: İşlem tarihi|`Timestamp`| optional
-|  |`complete_time`: İşlem tamamlanma tarihi|`Timestamp`| optional
-|  |`my_tx`  Kendi cüzdan tx leriniz|`Boolean`| optional
-|  |`account_id`  Hesap id|`String`| `my_tx` kullanılırsa zorunlu
-|`sorting`   | Sıralama kriteri|`Object`| required
-| | `seq` :  tx sequence numarası|`String` ("ASC" veya "DESC")| optional
-|   |`_id`: tx id|`String` ("ASC" veya "DESC")| optional
-|`cursor`   | Sayfalama cursor|`String`| optional
-|`limit`   | Sayfa başı tx sayısı(varsayılan:100|`Int`|optional
+|`filters`   | Filter criteria|`Object`| required
+| >         | `asset`: Asset type|`String`| optional
+|>|`type` : tx type|`Integer`| optional
+|>| `seq`:  tx sequence number|`Integer`| optional
+|>|`from` :Wallet address|`String`| optional
+|>|`action_time`: Action time|`Timestamp`| optional
+|>|`complete_time`: Action completion time|`Timestamp`| optional
+|>|`my_tx`  Your own transsactions |`Boolean`| optional
+|>|`account_id`  Account id|`String`| `my_tx` kullanılırsa zorunlu
+|`sorting`   | Sorting criteria|`Object`| required
+|>| `seq` :  tx sequence number|`String` ("ASC" veya "DESC")| optional
+|>|`_id`: tx id|`String` ("ASC" or "DESC")| optional
+|`cursor`   | pagination cursor|`String`| optional
+|`limit`   | tx number per page(default:100)|`Int`|optional
 
-> Örnek Kullanım:
+> Example Usage:
 
     >let result1= await monetrum.getTxList({filters:{}, sorting:{}, cursor:"", limit:100});
     >let result2= await monetrum.call("getTxList", {filters:{}, sorting:{}, cursor:"", limit:100});
@@ -182,8 +179,8 @@
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
 |`public_key`| Public key of Monetrum wallet |`String`| required
-|`contract_id`   | Akıllı sözleşme id'si |`String`| optional
-|`wallet_data`   | data of Monetrum wallet |`String`| optional
+|`contract_id`   | Smart contract id |`String`| optional
+|`wallet_data`   | Monetrum wallet data |`String`| optional
 
 > Example Usage:
 
@@ -201,8 +198,7 @@
 |--|--|--|--|
 |`from`| Address of sender wallet |`String`| required
 |`to`| Address of receiver wallet  |`String`| required
-|`amount`| Amount to be sent
- |`Float`| required
+|`amount`| Amount to be sent |`Float`| required
 |`asset`| Asset type to be sent |`String`| required
 |`private_key`| Private key of sender wallet |`String`| required
 |`public_key`| Public key of receiver wallet |`String`| required
@@ -210,7 +206,7 @@
 |`fee_from`| Public key of wallet to be cut fee  |`String`| optional
 |`desc`| Description of tx|`String`| optional
 |`data`| data to be added tx |`JSON`| optional
-|`forms`| Form data to be addedd tx |`JSON`| optional
+|`forms`| Form data to be added tx |`JSON`| optional
 
 > Example Usage:
 
@@ -240,11 +236,11 @@
 
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
-|`filters`| Filter criteria|`Object`|required
-|| `name`: Asset name|`String`|optional
-|| `symbol`: Asset symbol|`String`|optional
+|`filters`| Filtering criteria|`Object`|required
+| > | `name`: Asset name|`String`|optional
+| > | `symbol`: Asset symbol|`String`|optional
 |`sorting`| Sorting criteria|`Object`|required
-|| `_id` Asset id sorting|`String`("ASC" or "DESC")|optional
+|  >| `_id`: Asset id sorting|`String`("ASC" or "DESC")|optional
 |`cursor`   | Pagination cursor |`String`| optional
 
 > Example Usage:
@@ -262,9 +258,9 @@
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
 |`filters`| Filter criteria|`Object`|required
-|| `name`: Asset name|`String`|optional
-|| `symbol`: Asset symbol|`String`|optional
-|| `_id` Asset id sorting|`String`("ASC" or "DESC")|optional
+| > | `name`: Asset name|`String`|optional
+| >| `symbol`: Asset symbol|`String`|optional
+| > | `_id`: Asset id sorting|`String`("ASC" or "DESC")|optional
 
 
 > Example Usage:
@@ -280,7 +276,7 @@
 
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
-|`contract_id`| ID of smart contract|required
+|`contract_id`| Smart contract id|required
 
 > Example Usage:
 
@@ -310,7 +306,7 @@
 |Paramater|Description  |Data Type|Obligation
 |--|--|--|--|
 |`sorting`| Sorting criteria|`Object`|required
-|| `created_date`: Oluşturulma zamanı|`String`("ASC" or "DESC")|optional
+| > | `created_date`:Created date of smart contract|`String`("ASC" or "DESC")|optional
 |`cursor`|Pagination cursor|`String`|optional
 
 > Örnek Kullanım:
@@ -330,7 +326,7 @@
 |`code`| Code of smart contract|`String`|required
 |`name`| Name of smart contract|`String`|optional
 |`desc`| Description of smart contract|`String`|optional
-|`detail`| Detail of smart contract|`String`|v
+|`detail`| Detail of smart contract|`String`|optional
 |`image`| Image of smart contract|`String(Base64)`|optional
 
 > Example Usage:

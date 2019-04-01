@@ -16,7 +16,8 @@
 	      account_id: "5c12ed220b33ecae4f23268579"
 	    });
 	    await monetrum.connect();
-	    //The following two lines run the same service.
+	    // save() komutu, cüzdan yaratıp ağa kaydetmeyi sağlar. Bu yaratılan cüzdan aynı zamanda local veritabanına da kaydedilir.
+	    // Bu iki komut aynı fonksiyonaliteye sahiptir.
 	    let result1 = await monetrum.save({});
 	    let result2 = await monetrum.call("save", {});
 	    console.log("result1 : " + JSON.stringify(result1));
@@ -26,10 +27,8 @@
 	})();   
      
      
-   ## Monetrum Node Client Komutları
-   
-
-   ## getBalance
+## Monetrum Node Client Komutları
+## getBalance
 
 >   ***`getBalance()`*** servisi, cüzdan adresine göre bakiye bilgisi getirir.
 
@@ -125,17 +124,17 @@
 |Parametre|Açıklama  |Veri Tipi|Zorunluluk
 |--|--|--|--|
 |`filters`   | Filtreleme kriteri|`Object`| zorunlu
-|  | `asset`: Asset tipi|`String`| isteğe bağlı
-|  |`type` : tx tipi|`Integer`| isteğe bağlı
-| | `seq`:  tx sequence numarası|`Integer`| isteğe bağlı
-|   |`from` :Cüzdan adresi|`String`| isteğe bağlı
-|   |`action_time`: İşlem tarihi|`Timestamp`| isteğe bağlı
+| > | `asset`: Asset tipi|`String`| isteğe bağlı
+| > |`type` : tx tipi|`Integer`| isteğe bağlı
+| >| `seq`:  tx sequence numarası|`Integer`| isteğe bağlı
+|  > |`from` :Cüzdan adresi|`String`| isteğe bağlı
+| >  |`action_time`: İşlem tarihi|`Timestamp`| isteğe bağlı
 |  |`complete_time`: İşlem tamamlanma tarihi|`Timestamp`| isteğe bağlı
-|  |`my_tx`  Kendi cüzdan tx leriniz|`Boolean`| isteğe bağlı
+| > |`my_tx`:  Kendi cüzdan tx leriniz|`Boolean`| isteğe bağlı
 |  |`account_id`  Hesap id|`String`| `my_tx` kullanılırsa zorunludur
 |`sorting`   | Sıralama kriteri|`Object`| zorunlu
-| | `seq` :  tx sequence numarası|`String` ("ASC" veya "DESC")| isteğe bağlı
-|   |`_id`: tx id|`String` ("ASC" veya "DESC")| isteğe bağlı
+| >| `seq` :  tx sequence numarası|`String` ("ASC" veya "DESC")| isteğe bağlı
+| >  |`_id`: tx id|`String` ("ASC" veya "DESC")| isteğe bağlı
 |`cursor`   | Sayfalama cursor|`String`| isteğe bağlı
 |`limit`   | Sayfa başı tx sayısı(varsayılan:100|`Int`| isteğe bağlı
 
@@ -200,8 +199,7 @@
 |--|--|--|--|
 |`from`| Gönderen cüzdan adresi |`String`| zorunlu
 |`to`| Alıcı cüzdan adresi |`String`| zorunlu
-|`amount`| Gönderilecek miktar
- |`Float`| zorunlu
+|`amount`| Gönderilecek miktar |`Float`| zorunlu
 |`asset`| Gönderilecek asset tipi |`String`| zorunlu
 |`private_key`| Gönderen cüzdan private key'i |`String`| zorunlu
 |`public_key`| Gönderen cüzdan public key'i |`String`| zorunlu
@@ -240,10 +238,10 @@
 |Parametre|Açıklama  |Veri Tipi|Zorunluluk
 |--|--|--|--|
 |`filters`| Filtreleme kriteri|`Object`|zorunlu
-|| `name`: Asset adı|`String`|isteğe bağlı
-|| `symbol`: Asset sembolü|`String`|isteğe bağlı
+|> | `name`: Asset adı|`String`|isteğe bağlı
+|> | `symbol`: Asset sembolü|`String`|isteğe bağlı
 |`sorting`| Sıralama kriteri|`Object`|zorunlu
-|| `_id` Asset id sıralama|`String`("ASC" veya "DESC")|isteğe bağlı
+|> | `_id`: Asset id sıralama|`String`("ASC" veya "DESC")|isteğe bağlı
 |`cursor`   | Sayfalama cursor'u |`String`| isteğe bağlı
 
 > Örnek Kullanım:
@@ -259,9 +257,9 @@
 |Parametre|Açıklama  |Veri Tipi|Zorunluluk
 |--|--|--|--|
 |`filters`| Filtreleme kriteri|`Object`|zorunlu
-|| `name`: Asset adı|`String`|isteğe bağlı
-|| `symbol`: Asset sembolü|`String`|isteğe bağlı
-|| `_id` Asset id sıralama|`String`("ASC" veya "DESC")|isteğe bağlı
+|>| `name`: Asset adı|`String`|isteğe bağlı
+|>| `symbol`: Asset sembolü|`String`|isteğe bağlı
+|>| `_id`: Asset id sıralama|`String`("ASC" veya "DESC")|isteğe bağlı
 
 > Örnek Kullanım:
 
@@ -305,7 +303,7 @@
 |Parametre|Açıklama  |Veri Tipi|Zorunluluk
 |--|--|--|--|
 |`sorting`| Sıralama kriteri|`Object`|zorunlu
-|| `updated_time`: Güncellenme tarihi|`String`("ASC" veya "DESC")|isteğe bağlı
+|>| `created_date`: Güncellenme tarihi|`String`("ASC" veya "DESC")|isteğe bağlı
 |`cursor`| Sayfalama cursor'u|`String`|isteğe bağlı
 
 > Örnek Kullanım:
