@@ -45,7 +45,7 @@
 
 ## getBalancesByAccount  
 
-> ***`getBalanceByAccount()`*** is the service that brings balance information to the account.
+> ***`getBalanceByAccount()`*** is the service that brings balance informations to the account.
 
 
     getBalancesByAccount({assets, cursor});
@@ -128,7 +128,7 @@
 |>|`from` :Wallet address|`String`| optional
 |>|`action_time`: Action time|`Timestamp`| optional
 |>|`complete_time`: Action completion time|`Timestamp`| optional
-|>|`my_tx`  Your own transsactions |`Boolean`| optional
+|>|`my_tx` : Your own transactions |`Boolean`| optional
 |>|`account_id`  Account id|`String`| `my_tx` kullanılırsa zorunlu
 |`sorting`   | Sorting criteria|`Object`| required
 |>| `seq` :  tx sequence number|`String` ("ASC" or"DESC")| optional
