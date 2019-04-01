@@ -131,7 +131,7 @@
 |>|`my_tx`  Your own transsactions |`Boolean`| optional
 |>|`account_id`  Account id|`String`| `my_tx` kullanılırsa zorunlu
 |`sorting`   | Sorting criteria|`Object`| required
-|>| `seq` :  tx sequence number|`String` ("ASC" veya "DESC")| optional
+|>| `seq` :  tx sequence number|`String` ("ASC" or"DESC")| optional
 |>|`_id`: tx id|`String` ("ASC" or "DESC")| optional
 |`cursor`   | pagination cursor|`String`| optional
 |`limit`   | tx number per page(default:100)|`Int`|optional
