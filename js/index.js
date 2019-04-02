@@ -243,8 +243,7 @@ class Monetrum {
     }
   }
   /**
-   *1
-   * @description beklesinn
+   *   
    * @description getTxList() is the service that fetches the tx list by filter, sorting, cursor, limit fields.
    */
 
