@@ -6,6 +6,7 @@ var Monetrum = require("./index");
       account_id: "5c9f46c7a6bea52dcf0895a6"
     });
     await monetrum.connect();
+    
     //The following two lines run the same service.
     /*let result1 = await monetrum.getBalance({
       address: "90x1F2WYHPTZFWAVCNR42AAVYBETVPGDNST3K",
