@@ -140,7 +140,7 @@ class Monetrum {
         params
       );
       if (result) {
-        return result.wallet.getBalancesByAccount.wallets;
+        return result.wallet.getBalancesByAccount;
       }
       return;
     } catch (error) {
@@ -165,7 +165,8 @@ class Monetrum {
         functions["getWallets"].query,
         params
       );
-      let walletsFromApi = result.wallet.getWallets.wallets;
+      let walletInfoApi = result.wallet.getWallets;
+      let walletsFromApi = walletInfoApi.wallets;
       let walletsFromLocal = await getWalletsCreatedOnNodeClient({
         account_id: this.account_id
       });
@@ -181,7 +182,7 @@ class Monetrum {
           });
         }
       }
-      return wallets;
+      return walletInfoApi;
     } catch (error) {
       throw new Error(error);
     }

@@ -3,7 +3,7 @@ var Monetrum = require("./index");
   try {
     let monetrum = new Monetrum({
       uri: "http://185.195.255.172/graphql",
-      account_id: "5c70031b2484c3383f403ce0"
+      account_id: "5c9f46c7a6bea52dcf0895a6"
     });
     await monetrum.connect();
     //The following two lines run the same service.
@@ -72,12 +72,10 @@ var Monetrum = require("./index");
     });
 */
 
-    let result1 = await monetrum.getContracts({
-      sorting: { created_date: "ASC" }
-    });
+   /* let result1 = await monetrum.getWallets({});*/
     /*
     let result1 = await monetrum.createSmartContract({
-      name: "Mumbuçoğlu Kontratları",
+      name: "Monetrum Contracts",
       code: "dfskjskdfkjdsfkjdsgfıksdgf"
     });*/
 
