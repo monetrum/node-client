@@ -129,7 +129,7 @@
 |>|`action_time`: Action time|`Timestamp`| optional
 |>|`complete_time`: Action completion time|`Timestamp`| optional
 |>|`my_tx` : Your own transactions |`Boolean`| optional
-|>|`account_id`  Account id|`String`| `my_tx` kullanılırsa zorunlu
+|>|`account_id`  Account id|`String`|mandatory if `my_tx` is used
 |`sorting`   | Sorting criteria|`Object`| required
 |>| `seq` :  tx sequence number|`String` ("ASC" or"DESC")| optional
 |>|`_id`: tx id|`String` ("ASC" or "DESC")| optional
@@ -334,9 +334,8 @@
     let result1 = await monetrum.createSmartContract({code:"", name:"", desc:"", detail:"", image:""});
     let result2= await monetrum.call("createSmartContract", {code:"", name:"", desc:"", detail:"", image:""});
 
-## Documentation 
+## Dokümantasyon 
 |Folder|Content  |
 |--|--|
 |`./docs/en`  |Monetrum Node Client [English technical documantation](https://github.com/monetrum/node-client/tree/master/docs/en)   |
 |`./docs/tr`  |Monetrum Node Client [Türkçe teknik doküman](https://github.com/monetrum/node-client/tree/master/docs/tr)  |
-

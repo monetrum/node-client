@@ -131,12 +131,12 @@
 | >  |`action_time`: İşlem tarihi|`Timestamp`| isteğe bağlı
 |  |`complete_time`: İşlem tamamlanma tarihi|`Timestamp`| isteğe bağlı
 | > |`my_tx`:  Kendi cüzdan tx leriniz|`Boolean`| isteğe bağlı
-|  |`account_id`  Hesap id|`String`| `my_tx` kullanılırsa zorunludur
+|  >|`account_id`  Hesap id|`String`| `my_tx` kullanılırsa zorunludur
 |`sorting`   | Sıralama kriteri|`Object`| zorunlu
 | >| `seq` :  tx sequence numarası|`String` ("ASC" veya "DESC")| isteğe bağlı
 | >  |`_id`: tx id|`String` ("ASC" veya "DESC")| isteğe bağlı
 |`cursor`   | Sayfalama cursor|`String`| isteğe bağlı
-|`limit`   | Sayfa başı tx sayısı(varsayılan:100|`Int`| isteğe bağlı
+|`limit`   | Sayfa başı tx sayısı(varsayılan:100)|`Int`| isteğe bağlı
 
 > Örnek Kullanım:
 

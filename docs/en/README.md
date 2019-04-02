@@ -129,7 +129,7 @@
 |>|`action_time`: Action time|`Timestamp`| optional
 |>|`complete_time`: Action completion time|`Timestamp`| optional
 |>|`my_tx` : Your own transactions |`Boolean`| optional
-|>|`account_id`  Account id|`String`| `my_tx` kullanılırsa zorunlu
+|>|`account_id`  Account id|`String`|mandatory if `my_tx` is used
 |`sorting`   | Sorting criteria|`Object`| required
 |>| `seq` :  tx sequence number|`String` ("ASC" or"DESC")| optional
 |>|`_id`: tx id|`String` ("ASC" or "DESC")| optional
