@@ -6,7 +6,7 @@ var Monetrum = require("./index");
       account_id: "5c9f46c7a6bea52dcf0895a6"
     });
     await monetrum.connect();
-    
+
     //The following two lines run the same service.
     /*let result1 = await monetrum.getBalance({
       address: "90x1F2WYHPTZFWAVCNR42AAVYBETVPGDNST3K",
@@ -23,14 +23,12 @@ var Monetrum = require("./index");
       private_key: "AjfYQX1HFVaHTGcVuy1xW8mLXvJy2XFYtaRKKDMmoKva"
     });*/
 
-    /*let result1 = await monetrum.getTxList({
-      filters: {
-        asset: "MSM",
-        seq: 1448
-      },
+    let result1 = await monetrum.getTxList({
+      filters: { my_tx: true },
       sorting: { seq: "ASC", _id: "ASC" }
-    });*/
-    /*let result1 = await monetrum.getTx({ seq: 1448 });*/
+    });
+
+    /*let result1 = await monetrum.getTx({ seq: 1448 }); */
     /*let result1 = await monetrum.update({
       public_key:
         "5uD8VZry9s6dytwKKbUbNW74BGpW8WRiiEBqwhyEDppVDBYaZXqQeYGeEfAiTyVBFPWvFxyvrRRUjwYkPmZwx6ny",
@@ -73,7 +71,7 @@ var Monetrum = require("./index");
     });
 */
 
-   /* let result1 = await monetrum.getWallets({});*/
+    /* let result1 = await monetrum.getWallets({});*/
     /*
     let result1 = await monetrum.createSmartContract({
       name: "Monetrum Contracts",

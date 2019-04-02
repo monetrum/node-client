@@ -259,16 +259,19 @@ class Monetrum {
 
       let filters = {};
       let filter = params.filters;
+      if (this.account_id) {
+        filters.account_id = this.account_id;
+      }
       for (var key in filter) {
         if (filter.hasOwnProperty(key)) {
           if (key === "my_tx") {
-            //account_id geçilecek
-            filters[key] = filter[key];
+            filters[key] = new Boolean(filter[key]);
           } else {
             filters[key] = { eq: filter[key] };
           }
         }
       }
+
       let parameter = { filters, sorting: params.sorting };
       if (params.cursor) {
         parameter.cursor = params.cursor;
