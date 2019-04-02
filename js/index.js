@@ -71,7 +71,7 @@ class Monetrum {
       throw new Error(error);
     }
   }
-
+  
   /**
    *
    * @param {*} func
